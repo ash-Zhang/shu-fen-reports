@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "name": "shu-fen-reports",
+  "builds": [
+    {
+      "src": "**/*.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/posts/(.*)",
+      "dest": "/posts/$1"
+    }
+  ]
+}

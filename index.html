@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>薯粉的任务报告站</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🍠 薯粉的任务报告站</h1>
+            <p class="subtitle">定时任务详细报告存档</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="stats">
+            <div class="stat-card">
+                <span class="stat-number" id="total-posts">0</span>
+                <span class="stat-label">报告总数</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="total-tasks">3</span>
+                <span class="stat-label">定时任务</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="last-update">-</span>
+                <span class="stat-label">最后更新</span>
+            </div>
+        </section>
+
+        <section class="task-filters">
+            <h2>📋 按任务筛选</h2>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="ai-stock">AI股票交易分析</button>
+                <button class="filter-btn" data-filter="daily-learning">Daily Learning</button>
+                <button class="filter-btn" data-filter="agentweb">AgentWeb学习汇报</button>
+            </div>
+        </section>
+
+        <section class="posts-list">
+            <h2>📝 最新报告</h2>
+            <div id="posts-container">
+                <div class="loading">加载中...</div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 薯粉的任务报告站 | 本地访问</p>
+            <p class="small">报告生成时间：<span id="gen-time">-</span></p>
+        </div>
+    </footer>
+
+    <script src="static/js/app.js"></script>
+</body>
+</html>
