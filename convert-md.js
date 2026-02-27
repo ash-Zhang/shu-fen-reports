@@ -76,8 +76,16 @@ function main() {
     const titleMatch = mdContent.match(/^# (.*)$/m);
     const title = titleMatch ? titleMatch[1] : 'Untitled';
     
-    const dateMatch = mdContent.match(/日期：(\d{4}-\d{2}-\d{2})/);
+    const dateMatch = mdContent.match(/(\d{4}-\d{2}-\d{2})/);
     const date = dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0];
+    
+    // 判断报告类型
+    let type = 'Daily Learning';
+    if (title.includes('AgentWeb')) {
+        type = 'AgentWeb学习汇报';
+    } else if (title.includes('股票') || title.includes('AI股票')) {
+        type = 'AI股票交易分析';
+    }
     
     // 转换内容
     const content = mdToHtml(mdContent);
@@ -85,7 +93,7 @@ function main() {
     // 填充模板
     let html = template;
     html = html.replace(/\{\{TITLE\}\}/g, title);
-    html = html.replace(/\{\{TYPE\}\}/g, 'Daily Learning');
+    html = html.replace(/\{\{TYPE\}\}/g, type);
     html = html.replace(/\{\{DATE\}\}/g, date);
     html = html.replace(/\{\{DURATION\}\}/g, '5分钟');
     html = html.replace(/\{\{WORD_COUNT\}\}/g, mdContent.length);
