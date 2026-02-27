@@ -1,16 +1,30 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>薯粉的任务报告站</title>
+    <title>薯粉报告站</title>
     <link rel="stylesheet" href="static/css/style.css">
+    <script>
+        // Prevent flash of wrong theme
+        (function() {
+            var theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>🍠 薯粉的任务报告站</h1>
-            <p class="subtitle">定时任务详细报告存档</p>
+            <div class="header-left">
+                <h1>薯粉报告站</h1>
+                <p class="subtitle">定时任务报告存档</p>
+            </div>
+            <button class="theme-toggle" id="theme-toggle" aria-label="切换主题">
+                <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <span class="theme-label">Light</span>
+            </button>
         </div>
     </header>
 
@@ -18,40 +32,39 @@
         <section class="stats">
             <div class="stat-card">
                 <span class="stat-number" id="total-posts">0</span>
-                <span class="stat-label">报告总数</span>
+                <span class="stat-label">Reports</span>
             </div>
             <div class="stat-card">
                 <span class="stat-number" id="total-tasks">3</span>
-                <span class="stat-label">定时任务</span>
+                <span class="stat-label">Tasks</span>
             </div>
             <div class="stat-card">
                 <span class="stat-number" id="last-update">-</span>
-                <span class="stat-label">最后更新</span>
+                <span class="stat-label">Updated</span>
             </div>
         </section>
 
         <section class="task-filters">
-            <h2>📋 按任务筛选</h2>
+            <h2>Filter</h2>
             <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all">全部</button>
-                <button class="filter-btn" data-filter="ai-stock">AI股票交易分析</button>
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="ai-stock">AI Stock</button>
                 <button class="filter-btn" data-filter="daily-learning">Daily Learning</button>
-                <button class="filter-btn" data-filter="agentweb">AgentWeb学习汇报</button>
+                <button class="filter-btn" data-filter="agentweb">AgentWeb</button>
             </div>
         </section>
 
         <section class="posts-list">
-            <h2>📝 最新报告</h2>
+            <h2>Latest</h2>
             <div id="posts-container">
-                <div class="loading">加载中...</div>
+                <div class="loading">Loading...</div>
             </div>
         </section>
     </main>
 
     <footer>
         <div class="container">
-            <p>© 2026 薯粉的任务报告站 | 本地访问</p>
-            <p class="small">报告生成时间：<span id="gen-time">-</span></p>
+            <p>&copy; 2026 薯粉报告站</p>
         </div>
     </footer>
 

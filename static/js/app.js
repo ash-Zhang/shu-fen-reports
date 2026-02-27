@@ -1,82 +1,101 @@
-// 薯粉的任务报告站 - 主应用脚本
+// 薯粉报告站 - Main App
 
 const App = {
     posts: [],
     currentFilter: 'all',
-    
-    // 任务类型映射
+
     taskTypes: {
-        'ai-stock': { name: 'AI股票交易分析', badge: 'badge-ai-stock' },
+        'ai-stock': { name: 'AI Stock', badge: 'badge-ai-stock' },
         'daily-learning': { name: 'Daily Learning', badge: 'badge-daily-learning' },
-        'agentweb': { name: 'AgentWeb学习汇报', badge: 'badge-agentweb' }
+        'agentweb': { name: 'AgentWeb', badge: 'badge-agentweb' }
     },
-    
+
     init() {
+        this.initTheme();
         this.loadPosts();
         this.setupEventListeners();
-        this.updateStats();
     },
-    
-    // 加载报告数据
+
+    // Theme
+    initTheme() {
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        this.updateThemeUI(theme);
+
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            this.updateThemeUI(next);
+        });
+    },
+
+    updateThemeUI(theme) {
+        const toggle = document.getElementById('theme-toggle');
+        const label = toggle.querySelector('.theme-label');
+        const sunIcon = toggle.querySelector('.icon-sun');
+        const moonIcon = toggle.querySelector('.icon-moon');
+
+        if (theme === 'dark') {
+            sunIcon.style.display = 'none';
+            moonIcon.style.display = 'block';
+            if (label) label.textContent = 'Dark';
+        } else {
+            sunIcon.style.display = 'block';
+            moonIcon.style.display = 'none';
+            if (label) label.textContent = 'Light';
+        }
+    },
+
+    // Posts
     async loadPosts() {
         try {
-            // 从 posts 目录获取报告列表
             const response = await fetch('posts/index.json');
             if (response.ok) {
                 const data = await response.json();
                 this.posts = data.posts || [];
             } else {
-                // 如果没有索引文件，使用空数组
                 this.posts = [];
             }
         } catch (error) {
-            console.log('No posts found yet:', error);
             this.posts = [];
         }
-        
         this.renderPosts();
         this.updateStats();
     },
-    
-    // 渲染报告列表
+
     renderPosts() {
         const container = document.getElementById('posts-container');
-        
-        // 过滤报告
-        let filteredPosts = this.posts;
+        let filtered = this.posts;
         if (this.currentFilter !== 'all') {
-            filteredPosts = this.posts.filter(post => post.type === this.currentFilter);
+            filtered = this.posts.filter(p => p.type === this.currentFilter);
         }
-        
-        // 按日期降序排序
-        filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
-        
-        if (filteredPosts.length === 0) {
+        filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        if (filtered.length === 0) {
             container.innerHTML = `
                 <div class="empty-state">
-                    <div class="empty-icon">📝</div>
-                    <h3 class="empty-title">暂无报告</h3>
-                    <p class="empty-desc">任务运行后会自动生成报告，稍后再来看看吧~</p>
+                    <div class="empty-icon">--</div>
+                    <h3 class="empty-title">No reports yet</h3>
+                    <p class="empty-desc">Reports will appear here after tasks run.</p>
                 </div>
             `;
             return;
         }
-        
-        // 渲染报告卡片
-        container.innerHTML = filteredPosts.map(post => this.createPostCard(post)).join('');
+
+        container.innerHTML = filtered.map(p => this.createCard(p)).join('');
     },
-    
-    // 创建报告卡片HTML
-    createPostCard(post) {
-        const typeInfo = this.taskTypes[post.type] || { name: '其他', badge: '' };
-        const date = new Date(post.date).toLocaleString('zh-CN', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
+
+    createCard(post) {
+        const typeInfo = this.taskTypes[post.type] || { name: 'Other', badge: '' };
+        const date = new Date(post.date).toLocaleDateString('zh-CN', {
+            year: 'numeric', month: '2-digit', day: '2-digit'
         });
-        
+        const time = new Date(post.date).toLocaleTimeString('zh-CN', {
+            hour: '2-digit', minute: '2-digit'
+        });
+
         return `
             <article class="post-card" data-type="${post.type}">
                 <div class="post-header">
@@ -84,53 +103,38 @@ const App = {
                     <span class="post-badge ${typeInfo.badge}">${typeInfo.name}</span>
                 </div>
                 <div class="post-meta">
-                    <span>📅 ${date}</span>
-                    <span>📄 ${post.wordCount || 0} 字</span>
-                    ${post.duration ? `<span>⏱️ ${Math.round(post.duration / 1000)} 秒</span>` : ''}
+                    <span>${date} ${time}</span>
+                    <span>${post.wordCount || 0} words</span>
+                    ${post.duration ? `<span>${Math.round(post.duration / 1000)}s</span>` : ''}
                 </div>
-                <p class="post-excerpt">${post.excerpt || '暂无摘要'}</p>
+                <p class="post-excerpt">${post.excerpt || ''}</p>
                 <div class="post-footer">
-                    <a href="posts/${post.id}.html" class="read-more">
-                        查看完整报告 →
-                    </a>
-                    <div class="post-stats">
-                        <span>👁️ ${post.views || 0}</span>
-                    </div>
+                    <a href="posts/${post.id}.html" class="read-more">Read &rarr;</a>
                 </div>
             </article>
         `;
     },
-    
-    // 设置事件监听器
+
     setupEventListeners() {
-        // 筛选按钮点击
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                // 更新活跃状态
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
-                
-                // 更新筛选条件
                 this.currentFilter = e.target.dataset.filter;
                 this.renderPosts();
             });
         });
     },
-    
-    // 更新统计信息
+
     updateStats() {
-        const totalPosts = this.posts.length;
-        const lastUpdate = this.posts.length > 0 
-            ? new Date(Math.max(...this.posts.map(p => new Date(p.date)))).toLocaleDateString('zh-CN')
+        const total = this.posts.length;
+        const lastDate = total > 0
+            ? new Date(Math.max(...this.posts.map(p => new Date(p.date)))).toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' })
             : '-';
-        
-        document.getElementById('total-posts').textContent = totalPosts;
-        document.getElementById('last-update').textContent = lastUpdate;
-        document.getElementById('gen-time').textContent = new Date().toLocaleString('zh-CN');
+
+        document.getElementById('total-posts').textContent = total;
+        document.getElementById('last-update').textContent = lastDate;
     }
 };
 
-// 初始化应用
-document.addEventListener('DOMContentLoaded', () => {
-    App.init();
-});
+document.addEventListener('DOMContentLoaded', () => App.init());
