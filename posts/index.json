@@ -1,6 +1,16 @@
 {
   "posts": [
     {
+      "id": "twitter-feed-2026-03-03-morning",
+      "title": "Twitter 热门信息摘要 - 2026年3月3日 早间版",
+      "type": "twitter-digest",
+      "date": "2026-03-03T05:00:00+08:00",
+      "excerpt": "今日Twitter热点：傅盛分享OpenClaw自动进化案例，两天安装139个技能；闲鱼电影票代买AI自动化月入12万；Anthropic推出官方学习平台；WiFi-DensePose技术实现穿墙动作识别。",
+      "wordCount": 4500,
+      "duration": 3000,
+      "views": 0
+    },
+    {
       "id": "2026-02-27-agentweb",
       "title": "AgentWeb 学习报告 - 2026-02-27",
       "type": "agentweb",
