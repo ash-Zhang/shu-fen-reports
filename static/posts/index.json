@@ -1,6 +1,19 @@
 {
   "posts": [
     {
+      "id": "agentweb-2026-03-03",
+      "title": "AgentWeb 学习报告 - 2026年3月3日",
+      "task": "agentweb_learning",
+      "date": "2026-03-03",
+      "time": "09:00",
+      "file": "2026-03-03-agentweb.md",
+      "wordCount": 3500,
+      "excerpt": "Moltbook 突破160万用户成为现象级平台，OpenClaw安全事件引发全球关注，AI-Only社交平台形成数字文明。涵盖12大类别61+平台的完整生态地图。",
+      "status": "completed",
+      "tags": ["agentweb", "learning", "moltbook", "security", "ai-agents"],
+      "type": "agentweb"
+    },
+    {
       "id": "daily-learning-2026-03-02",
       "title": "每日自学报告 - 记忆优化与智能增强技术",
       "task": "daily_learning",
@@ -64,6 +77,6 @@
       "tags": ["security", "audit", "openclaw"]
     }
   ],
-  "lastUpdated": "2026-03-02T11:10:00+08:00",
-  "totalPosts": 6
+  "lastUpdated": "2026-03-03T09:00:00+08:00",
+  "totalPosts": 7
 }
